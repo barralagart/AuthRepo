@@ -1,40 +1,28 @@
 import { Injectable } from "@nestjs/common";
-import { UserDTO } from "./dto/user.dto";
+import { InjectRepository } from "@nestjs/typeorm";
+import { User } from "./user.entity";
+import { Repository } from "typeorm";
 
 @Injectable()
 export class UserService {
-  private readonly database: Array<UserDTO> = [
-    {
-      id: 1,
-      username: "natan",
-      password: "root",
-      email: "natan@email.com",
-      role: "admin",
-    },
-    {
-      id: 2,
-      username: "pikachu",
-      password: "1234",
-      email: "pikachu@email.com",
-      role: "user",
-    },
-    {
-      id: 3,
-      username: "cacau",
-      password: "1234",
-      email: "cacau@email.com",
-      role: "user",
-    },
-    {
-      id: 4,
-      username: "valentino",
-      password: "1234",
-      email: "valentino@email.com",
-      role: "admin",
-    },
-  ];
+  constructor(
+    @InjectRepository(User)
+    private readonly userRepository: Repository<User>,
+  ) {}
 
-  async getUser(username: string): Promise<UserDTO | undefined> {
-    return this.database.find((user) => user.username === username);
+  async findAll(): Promise<User[]> {
+    return await this.userRepository.find();
+  }
+
+  async findOne(username: string): Promise<User> {
+    return await this.userRepository.findOneBy({ username });
+  }
+
+  async create(user: User): Promise<any> {
+    await this.userRepository.save(user);
+  }
+
+  async remove(username: string): Promise<any> {
+    return await this.userRepository.delete(username);
   }
 }
