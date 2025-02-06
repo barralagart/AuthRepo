@@ -6,7 +6,7 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: auth
-      MYSQL_USER: natan
+      MYSQL_USER: user
       MYSQL_PASSWORD: 1234
     ports:
       - "3306:3306"
